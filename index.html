@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>GSD Tech Gaming · Free Games</title>
-<meta name="description" content="Little Tigers Run and Squishy Land: free games for iPhone and iPad.">
+<meta name="description" content="Little Tigers Run, Dojo Wars and Squishy Land: free games for iPhone and iPad.">
 <meta property="og:title" content="GSD Tech Gaming · Free Games">
-<meta property="og:description" content="Little Tigers Run and Squishy Land: free games for iPhone and iPad.">
+<meta property="og:description" content="Little Tigers Run, Dojo Wars and Squishy Land: free games for iPhone and iPad.">
 <meta property="og:image" content="https://josephohtkd-ai.github.io/img/ltr_iphone_1_dojo.jpg">
 <meta name="theme-color" content="#160c33">
 <link rel="icon" href="img/little-tigers-run.jpg">
@@ -15,7 +15,7 @@
   @font-face { font-family: 'Baloo 2'; src: url('fonts/baloo2.woff2') format('woff2'); font-weight: 400 800; font-display: swap; }
   :root {
     --ink: #160c33; --ink2: #241452; --gold1: #fff27a; --gold2: #ffb000; --text: #fff; --muted: rgba(255,255,255,0.72);
-    --tiger1: #ff9a2e; --tiger2: #e2560c; --squish1: #ff8fc8; --squish2: #8a6bff;
+    --tiger1: #ff9a2e; --tiger2: #e2560c; --squish1: #ff8fc8; --squish2: #8a6bff; --dojo1: #e8384a; --dojo2: #5a1030;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { -webkit-text-size-adjust: 100%; }
@@ -29,7 +29,7 @@
   .sparks { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
   .sparks i { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #fff; opacity: 0; animation: tw 4s infinite ease-in-out; box-shadow: 0 0 8px #fff; }
   @keyframes tw { 0%,100% { opacity: 0; transform: scale(0.4); } 50% { opacity: 0.9; transform: scale(1); } }
-  main { position: relative; z-index: 1; width: 100%; max-width: 1040px; margin: 0 auto; padding: max(28px, env(safe-area-inset-top)) 16px 48px; }
+  main { position: relative; z-index: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: max(28px, env(safe-area-inset-top)) 16px 48px; }
 
   /* hero */
   .hero { text-align: center; padding: 18px 0 30px; }
@@ -49,8 +49,8 @@
   .pill svg { width: 20px; height: 20px; margin-top: -2px; }
 
   /* game cards */
-  .games { display: grid; grid-template-columns: 1fr; gap: 22px; }
-  @media (min-width: 900px) { .games { grid-template-columns: 1fr 1fr; } }
+  .games { display: grid; grid-template-columns: minmax(0, 560px); justify-content: center; gap: 22px; }
+  @media (min-width: 1180px) { .games { grid-template-columns: repeat(3, minmax(0, 1fr)); } .shots img { width: 136px; height: 296px; } .shots { height: 300px; } .shots img:nth-child(1) { transform: translateX(-104px) rotate(-9deg) translateY(14px); } .shots img:nth-child(3) { transform: translateX(104px) rotate(9deg) translateY(14px); } }
   .card { position: relative; border-radius: 30px; padding: 22px 20px 20px; overflow: hidden; isolation: isolate;
     box-shadow: 0 20px 50px rgba(0,0,0,0.45), inset 0 0 0 2px rgba(255,255,255,0.18); }
   .card::before { content: ''; position: absolute; inset: 0; z-index: -2; }
@@ -58,6 +58,7 @@
     background: repeating-conic-gradient(from 0deg at 50% 38%, #fff 0deg 7deg, transparent 7deg 22deg); animation: spin 40s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .tiger::before { background: linear-gradient(160deg, var(--tiger1), var(--tiger2) 70%, #a8320a); }
+  .dojo::before { background: linear-gradient(160deg, var(--dojo1), #a01838 55%, var(--dojo2)); }
   .squish::before { background: linear-gradient(160deg, var(--squish1), #c86bff 50%, var(--squish2)); }
   .head { display: flex; gap: 14px; align-items: center; }
   .icon { width: 84px; height: 84px; border-radius: 22px; flex: none; box-shadow: 0 8px 20px rgba(0,0,0,0.35), 0 0 0 3px rgba(255,255,255,0.85); }
@@ -91,9 +92,39 @@
   footer a { color: #fff; }
   @media (max-width: 380px) { .shots img { width: 128px; height: 278px; } .shots { height: 285px; } .shots img:nth-child(1) { transform: translateX(-98px) rotate(-9deg) translateY(14px); } .shots img:nth-child(3) { transform: translateX(98px) rotate(9deg) translateY(14px); } }
   @media (prefers-reduced-motion: reduce) { .card::after, .sparks i { animation: none; } }
+  /* the intro: the three games pop in, the name slams down with a shine, then an iris opens onto the page */
+  #intro { position: fixed; inset: 0; z-index: 50; display: grid; place-content: center; justify-items: center; gap: 26px; cursor: pointer; overflow: hidden;
+    background: radial-gradient(circle at 50% 45%, #3c1a7e, var(--ink) 70%); clip-path: circle(150% at 50% 50%); transition: clip-path .75s cubic-bezier(.7,0,.3,1); }
+  #intro.out { clip-path: circle(0% at 50% 50%); }
+  #intro .burst { position: absolute; inset: -60%; background: repeating-conic-gradient(from 0deg, rgba(255,210,90,.14) 0 8deg, transparent 8deg 24deg); animation: spin 18s linear infinite; }
+  .in-icons { display: flex; gap: 16px; position: relative; }
+  .in-icons img { width: 88px; height: 88px; border-radius: 23px; box-shadow: 0 12px 26px rgba(0,0,0,.5), 0 0 0 3px #fff; transform: scale(0) rotate(-25deg); animation: pop .55s cubic-bezier(.3,1.7,.5,1) forwards; }
+  .in-icons img:nth-child(2) { animation-delay: .14s; } .in-icons img:nth-child(3) { animation-delay: .28s; }
+  @keyframes pop { to { transform: scale(1) rotate(0); } }
+  .in-title { position: relative; font-family: 'Luckiest Guy', 'Baloo 2', sans-serif; font-size: clamp(58px, 15vw, 110px); line-height: .95; text-align: center; letter-spacing: 2px;
+    background: linear-gradient(100deg, var(--gold2) 0%, var(--gold1) 38%, #ffffff 50%, var(--gold1) 62%, var(--gold2) 100%); background-size: 260% 100%; background-position: 100% 0;
+    -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-stroke: 2px #1d1446; paint-order: stroke fill;
+    filter: drop-shadow(0 5px 0 #1d1446) drop-shadow(0 0 30px rgba(255,190,60,.5));
+    opacity: 0; transform: scale(2.6); animation: slam .42s cubic-bezier(.2,1.4,.4,1) .55s forwards, shine 1.1s ease 1s forwards; }
+  @keyframes slam { to { opacity: 1; transform: scale(1); } }
+  @keyframes shine { to { background-position: 0% 0; } }
+  .in-sub { position: relative; opacity: 0; font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); animation: fadein .4s ease 1.35s forwards; }
+  @keyframes fadein { to { opacity: 1; } }
+  /* the page slides up into place as the iris opens */
+  .hero, .card { transition: opacity .6s ease, transform .7s cubic-bezier(.2,1,.3,1); }
+  .card:nth-child(1) { transition-delay: .12s; } .card:nth-child(2) { transition-delay: .22s; } .card:nth-child(3) { transition-delay: .32s; }
+  body.pre .hero, body.pre .card { opacity: 0; transform: translateY(46px) scale(.97); }
+  @media (prefers-reduced-motion: reduce) { #intro { display: none; } body.pre .hero, body.pre .card { opacity: 1; transform: none; } }
 </style>
+<noscript><style>#intro { display: none; } body.pre .hero, body.pre .card { opacity: 1; transform: none; }</style></noscript>
 </head>
-<body>
+<body class="pre">
+<div id="intro" aria-hidden="true">
+  <div class="burst"></div>
+  <div class="in-icons"><img src="img/little-tigers-run.jpg" alt=""><img src="img/dojo-wars.jpg" alt=""><img src="img/squishy-land.jpg" alt=""></div>
+  <div class="in-title">GSD TECH<br>GAMING</div>
+  <div class="in-sub">Tap to enter</div>
+</div>
 <div class="sparks" aria-hidden="true"></div>
 <main>
   <header class="hero">
@@ -136,6 +167,28 @@
       <a class="help" href="https://josephohtkd-ai.github.io/littletigers-run-help/">Help &amp; privacy</a>
     </article>
 
+    <article class="card dojo">
+      <div class="head">
+        <img class="icon" src="img/dojo-wars.jpg" alt="Dojo Wars app icon" width="84" height="84">
+        <div>
+          <h2 class="name">DOJO WARS</h2>
+          <div class="meta"><span class="chip">Card strategy</span><span class="chip">Online battles</span><span class="chip">Free</span></div>
+        </div>
+      </div>
+      <p class="pitch">Build a deck of martial artists from 32 styles and break your rival's dojos in fast three-minute battles. Climb the Belt Path to legend.</p>
+      <div class="shots" aria-hidden="true">
+        <img src="img/dw_3.jpg" alt="" loading="lazy">
+        <img src="img/dw_1.jpg" alt="">
+        <img src="img/dw_5.jpg" alt="" loading="lazy">
+      </div>
+      <div class="ctas">
+        <a class="store" href="https://apps.apple.com/us/app/dojo-wars/id6831300590" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.4-.8 1.5 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.8-1-2.8-4.1ZM13.9 5c.7-.9 1.2-2.1 1.1-3.3-1 0-2.3.7-3 1.6-.7.8-1.3 2-1.1 3.2 1.1.1 2.3-.6 3-1.5Z"/></svg>
+          <span><small>Download on the</small><strong>App Store</strong></span>
+        </a>
+      </div>
+    </article>
+
     <article class="card squish">
       <div class="head">
         <img class="icon" src="img/squishy-land.jpg" alt="Squishy Land app icon" width="84" height="84">
@@ -174,6 +227,18 @@
     s.style.animationDelay = (Math.random() * 4).toFixed(2) + 's'; s.style.animationDuration = (3 + Math.random() * 3).toFixed(2) + 's';
     box.appendChild(s);
   }
+  // the intro plays once a visit (tap to skip), then opens onto the page
+  const intro = document.getElementById('intro');
+  let seen = false; try { seen = sessionStorage.getItem('gsdIntro') === '1'; } catch (e) {}
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function enter() {
+    if (!intro || intro.classList.contains('out')) return;
+    intro.classList.add('out'); document.body.classList.remove('pre');
+    try { sessionStorage.setItem('gsdIntro', '1'); } catch (e) {}
+    setTimeout(() => intro.remove(), 900);
+  }
+  if (seen || reduce) { intro.remove(); document.body.classList.remove('pre'); }
+  else { intro.addEventListener('click', enter); setTimeout(enter, 2300); }
 </script>
 </body>
 </html>
